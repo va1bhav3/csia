@@ -1,0 +1,14 @@
+// {
+//     "version": "0.2.0",
+//     "configurations": [
+//         {
+//             "type": "java",
+//             "name": "Launch MainPage",
+//             "request": "launch",
+//             "mainClass": "MainPage",
+//             "projectName": "bugtester1",
+//             "args": "",
+            
+//         }
+//     ]
+// }

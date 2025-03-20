@@ -54,7 +54,7 @@ public class ShowLogAction implements ActionListener {
         // Fetch data from the database
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT name, season, episode, platform FROM shows")) {
+             ResultSet rs = stmt.executeQuery("SELECT name, season, episode, platform, date_created FROM shows")) {
 
             StringBuilder showsText = new StringBuilder();
             int index = 1;
@@ -63,10 +63,11 @@ public class ShowLogAction implements ActionListener {
                 int season = rs.getInt("season");
                 int episode = rs.getInt("episode");
                 String platform = rs.getString("platform");
+                String date_created = rs.getString("date_created");
                 showsText.append("\n").append(index).append(". ")
                         .append(name).append(" - Season ").append(season)
                         .append(", Episode ").append(episode)
-                        .append(" on ").append(platform).append("\n");
+                        .append(" on ").append(platform).append(" on " + date_created).append("\n");
                 index++;
             }
 

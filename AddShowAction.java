@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class AddShowAction implements ActionListener {
     private final JFrame frame;
@@ -37,11 +39,20 @@ public class AddShowAction implements ActionListener {
         } else {
             try (Connection conn = DriverManager.getConnection(url, user, password);
                  PreparedStatement stmt = conn.prepareStatement(
-                     "INSERT INTO shows (name, season, episode, platform) VALUES (?, ?, ?, ?)")) { //removed "INSERT INTO shows (name, season, episode, platform) VALUES (?, ?, ?, ?)" in the quotation marks
+                     "INSERT INTO shows (name, season, episode, platform, date_created) VALUES (?, ?, ?, ?,?)")) {
+                         //removed "INSERT INTO shows (name, season, episode, platform) VALUES (?, ?, ?, ?)" in the quotation marks
+                         LocalDate currentDate = LocalDate.now();
+        
+        
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+                        
+                        // Convert the date to a string
+                        String dateString = currentDate.format(formatter);
                 stmt.setString(1, nameFieldResult);
                 stmt.setInt(2, season);
                 stmt.setInt(3, episode);
                 stmt.setString(4, platformFieldResult);
+                stmt.setString(5, dateString);
                 stmt.executeUpdate();
                 JOptionPane.showMessageDialog(frame, "Show added successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
 

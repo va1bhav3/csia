@@ -41,11 +41,8 @@ public class AddShowAction implements ActionListener {
                  PreparedStatement stmt = conn.prepareStatement(
                      "INSERT INTO shows (name, season, episode, platform, date_created) VALUES (?, ?, ?, ?,?)")) {
                          //removed "INSERT INTO shows (name, season, episode, platform) VALUES (?, ?, ?, ?)" in the quotation marks
-                         LocalDate currentDate = LocalDate.now();
-        
-        
+                        LocalDate currentDate = LocalDate.now();
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
-                        
                         // Convert the date to a string
                         String dateString = currentDate.format(formatter);
                 stmt.setString(1, nameFieldResult);

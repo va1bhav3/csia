@@ -35,15 +35,25 @@ public class ShowLogAction implements ActionListener {
         sortPanel.add(platformButton);
         sortPanel.add(showNameButton);
 
+        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 2));
+        JTextField searchField = new JTextField(20);
+        searchPanel.add(new JLabel("Search: "));
+        searchPanel.add(searchField);
+
         // Text area for the show list
         JTextArea showsList = new JTextArea();
         showsList.setEditable(false);
         showsList.setFont(new Font("Arial", Font.PLAIN, 14));
 
+        JPanel topPanel = new JPanel();
+        topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
+        topPanel.add(sortPanel);
+        topPanel.add(searchPanel);
         // Create a sub-panel to hold sort controls and show list vertically
         JPanel contentPanel = new JPanel(new BorderLayout(5, 5));
-        contentPanel.add(sortPanel, BorderLayout.NORTH);
-        contentPanel.add(new JScrollPane(showsList), BorderLayout.CENTER);
+        contentPanel.add(topPanel, BorderLayout.NORTH);
+        contentPanel.add(new JScrollPane(showsList), BorderLayout.CENTER);  
+        
 
         // Add the content panel to the main panel
         mainPanel.add(contentPanel, BorderLayout.CENTER);

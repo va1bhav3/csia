@@ -20,7 +20,7 @@ public class ShowTVShowsAction implements ActionListener {
                 JFrame allShowsFrame = new JFrame("TVShow Names");
         allShowsFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         allShowsFrame.setLayout(new BorderLayout(10, 10));
-        allShowsFrame.setSize(500, 400);
+        allShowsFrame.setSize(800, 400);
         allShowsFrame.setLocationRelativeTo(null);
 
         // Create a single panel for both sort controls and show list
@@ -49,6 +49,13 @@ public class ShowTVShowsAction implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 fetchShowsByPlatform();
+            }
+        });
+
+        alphaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                fetchShowsAlphabetically();
             }
         });
         
@@ -123,6 +130,41 @@ public class ShowTVShowsAction implements ActionListener {
                 }
 
                 showsText.append(" - ").append(name).append("\n");
+            }
+
+            if (showsText.length() == 0) {
+                showsText.append("No TV shows found in the database.");
+            }
+            showsList.setText(showsText.toString());
+
+        } catch (SQLException ex) {
+            showsList.setText("Error fetching data: " + ex.getMessage());
+        }
+    }
+
+    private void fetchShowsAlphabetically() {
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT distinct name, platform FROM shows ORDER BY name")) {
+
+            StringBuilder showsText = new StringBuilder();
+            String lastName = "";
+            
+
+            while (rs.next()) {
+                String name = rs.getString("name");
+                String platform = rs.getString("platform");
+
+                // Print platform name only when it changes
+                if (!name.equals(lastName)) {
+                    showsText.append("\n").append(name.substring(0,1).toUpperCase()).append("\n");
+                    lastName = platform;
+                }
+
+                showsText.append("\n")
+                        .append(name)
+                        .append(" on ").append(platform).append("\n");
+
             }
 
             if (showsText.length() == 0) {

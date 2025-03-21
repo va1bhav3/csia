@@ -5,14 +5,14 @@ import java.awt.*;
 import java.sql.*;
 
 public class ShowTVShowsAction implements ActionListener {
-    private final JFrame frame;
+    //private final JFrame frame;
     private static final String URL = "jdbc:mysql://localhost:3306/tv_show_tracker";
     private static final String USER = "root";
     private static final String PASSWORD = "Va1bhav@2008";
     JTextArea showsList = new JTextArea();
 
     public ShowTVShowsAction(JFrame frame) {
-        this.frame = frame; 
+        //this.frame = frame; 
     }
 
     @Override

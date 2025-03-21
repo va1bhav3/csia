@@ -234,7 +234,7 @@ public class ShowLogAction implements ActionListener {
                 showsText.append("\n")
                         .append("- Season ").append(season)
                         .append(", Episode ").append(episode)
-                        .append(" on ").append(date).append("\n");
+                        .append(" on ").append(platform + " on ").append(date).append("\n");
 
                 //showsText.append("tgjghjgjgjgj\n");
                         

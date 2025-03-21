@@ -1,5 +1,4 @@
 import javax.swing.*;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.*;
@@ -10,9 +9,10 @@ public class ShowTVShowsAction implements ActionListener {
     private static final String URL = "jdbc:mysql://localhost:3306/tv_show_tracker";
     private static final String USER = "root";
     private static final String PASSWORD = "Va1bhav@2008";
+    JTextArea showsList = new JTextArea();
 
     public ShowTVShowsAction(JFrame frame) {
-        this.frame = frame;
+        this.frame = frame; 
     }
 
     @Override
@@ -44,6 +44,13 @@ public class ShowTVShowsAction implements ActionListener {
                 System.out.println(searchText.getText());
             }
         });
+
+        platformButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                fetchShowsByPlatform();
+            }
+        });
         
         
         sortPanel.add(platformButton);
@@ -54,7 +61,7 @@ public class ShowTVShowsAction implements ActionListener {
         
 
         // Text area for the show list
-        JTextArea showsList = new JTextArea();
+        
         showsList.setEditable(false);
         showsList.setFont(new Font("Arial", Font.PLAIN, 14));
 
@@ -95,6 +102,37 @@ public class ShowTVShowsAction implements ActionListener {
         }
 
         allShowsFrame.setVisible(true);
+    }
+
+    private void fetchShowsByPlatform() {
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT distinct name, platform FROM shows ORDER BY platform")) {
+
+            StringBuilder showsText = new StringBuilder();
+            String lastPlatform = "";
+
+            while (rs.next()) {
+                String name = rs.getString("name");
+                String platform = rs.getString("platform");
+
+                // Print platform name only when it changes
+                if (!platform.equals(lastPlatform)) {
+                    showsText.append("\n").append(platform.toUpperCase()).append("\n");
+                    lastPlatform = platform;
+                }
+
+                showsText.append(" - ").append(name).append("\n");
+            }
+
+            if (showsText.length() == 0) {
+                showsText.append("No TV shows found in the database.");
+            }
+            showsList.setText(showsText.toString());
+
+        } catch (SQLException ex) {
+            showsList.setText("Error fetching data: " + ex.getMessage());
+        }
     }
 }
 

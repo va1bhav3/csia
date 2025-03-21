@@ -37,6 +37,7 @@ public class ShowTVShowsAction implements ActionListener {
         
         JButton platformButton = new JButton("Platform");
         JButton alphaButton = new JButton("Alphabetical");
+        JButton defaultButton = new JButton("Default");
         JTextField searchText = new JTextField(10);
         searchText.addActionListener(new ActionListener() {
             @Override
@@ -58,10 +59,18 @@ public class ShowTVShowsAction implements ActionListener {
                 fetchShowsAlphabetically();
             }
         });
+
+        defaultButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                fetchShowDefault();
+            }
+        });
         
         
         sortPanel.add(platformButton);
         sortPanel.add(alphaButton);
+        sortPanel.add(defaultButton);
         sortPanel.add(new JLabel("Search: "));
         sortPanel.add(searchText);
 
@@ -84,6 +93,13 @@ public class ShowTVShowsAction implements ActionListener {
         allShowsFrame.add(mainPanel, BorderLayout.CENTER);
 
         // Fetch data from the database
+        fetchShowDefault();
+
+        allShowsFrame.setVisible(true);
+    }
+
+    private void fetchShowDefault(){
+
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery("SELECT distinct name, platform FROM shows")) {
@@ -107,8 +123,6 @@ public class ShowTVShowsAction implements ActionListener {
         } catch (SQLException ex) {
             showsList.setText("Error connecting to database: " + ex.getMessage());
         }
-
-        allShowsFrame.setVisible(true);
     }
 
     private void fetchShowsByPlatform() {

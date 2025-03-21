@@ -7,6 +7,7 @@ import java.sql.*;
 public class ShowLogAction implements ActionListener {
     private static final String URL = "jdbc:mysql://localhost:3306/tv_show_tracker";
     private static final String USER = "root";
+    JTextArea showsList = new JTextArea();
     private static final String PASSWORD = "Va1bhav@2008";
 
     @Override
@@ -31,6 +32,13 @@ public class ShowLogAction implements ActionListener {
         JButton dateButton = new JButton("Date");
         JButton platformButton = new JButton("Platform");
         JButton showNameButton = new JButton("Show Name");
+
+        dateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                fetchShowsByDate();
+            }
+        });
         sortPanel.add(dateButton);
         sortPanel.add(platformButton);
         sortPanel.add(showNameButton);
@@ -41,7 +49,7 @@ public class ShowLogAction implements ActionListener {
         searchPanel.add(searchField);
 
         // Text area for the show list
-        JTextArea showsList = new JTextArea();
+        //JTextArea showsList = new JTextArea();
         showsList.setEditable(false);
         showsList.setFont(new Font("Arial", Font.PLAIN, 14));
 
@@ -53,7 +61,6 @@ public class ShowLogAction implements ActionListener {
         JPanel contentPanel = new JPanel(new BorderLayout(5, 5));
         contentPanel.add(topPanel, BorderLayout.NORTH);
         contentPanel.add(new JScrollPane(showsList), BorderLayout.CENTER);  
-        
 
         // Add the content panel to the main panel
         mainPanel.add(contentPanel, BorderLayout.CENTER);
@@ -91,5 +98,53 @@ public class ShowLogAction implements ActionListener {
         }
 
         allShowsFrame.setVisible(true);
+    }
+
+    public void fetchShowsByDate(){
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT name, season, episode, platform, date_created FROM shows")) {
+
+            StringBuilder showsText = new StringBuilder();
+            String lastDate = "";
+            System.out.println(11111);
+
+            while (rs.next()) {
+                System.out.println(showsText.toString() + "ghgjgjg");
+                String name = rs.getString("name");
+                String date = rs.getString("date_created");
+                
+                int season = rs.getInt("season");
+                int episode = rs.getInt("episode");
+                String platform = rs.getString("platform");
+                
+
+                // Print platform name only when it changes
+                if (!date.equals(lastDate)) {
+                    showsText.append("\n").append(date.toUpperCase()).append("\n");
+                    lastDate = date;
+                }
+
+                showsText.append("\n").append(". ")
+                        .append(name).append(" - Season ").append(season)
+                        .append(", Episode ").append(episode)
+                        .append(" on ").append(platform).append("\n");
+
+                //showsText.append("tgjghjgjgjgj\n");
+                        
+            }
+
+            if (showsText.length() == 0) {
+                showsText.append("No TV shows found in the database.");
+            }
+            System.out.println("here");
+            showsList.setText(showsText.toString());
+            System.out.println(showsList.getText());
+            
+
+        } catch (SQLException ex) {
+            showsList.setText("Error fetching data: " + ex.getMessage());
+        }
+
     }
 }

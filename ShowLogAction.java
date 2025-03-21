@@ -39,6 +39,18 @@ public class ShowLogAction implements ActionListener {
                 fetchShowsByDate();
             }
         });
+        platformButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                fetchShowsByPlatform();
+            }
+        });
+        showNameButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                fetchShowsByName();
+            }
+        });
         sortPanel.add(dateButton);
         sortPanel.add(platformButton);
         sortPanel.add(showNameButton);
@@ -103,11 +115,11 @@ public class ShowLogAction implements ActionListener {
     public void fetchShowsByDate(){
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT name, season, episode, platform, date_created FROM shows")) {
+             ResultSet rs = stmt.executeQuery("SELECT name, season, episode, platform, date_created FROM shows order by date_created")) {
 
             StringBuilder showsText = new StringBuilder();
             String lastDate = "";
-            System.out.println(11111);
+            //System.out.println(11111);
 
             while (rs.next()) {
                 System.out.println(showsText.toString() + "ghgjgjg");
@@ -137,9 +149,9 @@ public class ShowLogAction implements ActionListener {
             if (showsText.length() == 0) {
                 showsText.append("No TV shows found in the database.");
             }
-            System.out.println("here");
+            
             showsList.setText(showsText.toString());
-            System.out.println(showsList.getText());
+            //System.out.println(showsList.getText());
             
 
         } catch (SQLException ex) {
@@ -147,4 +159,99 @@ public class ShowLogAction implements ActionListener {
         }
 
     }
+    public void fetchShowsByPlatform(){
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT name, season, episode, platform, date_created FROM shows order by platform")) {
+
+            StringBuilder showsText = new StringBuilder();
+            String lastPlatform = "";
+            //System.out.println(11111);
+
+            while (rs.next()) {
+                System.out.println(showsText.toString() + "ghgjgjg");
+                String name = rs.getString("name");
+                String date = rs.getString("date_created");
+                
+                int season = rs.getInt("season");
+                int episode = rs.getInt("episode");
+                String platform = rs.getString("platform");
+                
+
+                // Print platform name only when it changes
+                if (!platform.equals(lastPlatform)) {
+                    showsText.append("\n").append(platform.toUpperCase()).append("\n");
+                    lastPlatform = platform;
+                }
+
+                showsText.append("\n").append(". ")
+                        .append(name).append(" - Season ").append(season)
+                        .append(", Episode ").append(episode)
+                        .append(" on ").append(platform + " on ").append(date).append("\n");
+
+                //showsText.append("tgjghjgjgjgj\n");
+                        
+            }
+
+            if (showsText.length() == 0) {
+                showsText.append("No TV shows found in the database.");
+            }
+            
+            showsList.setText(showsText.toString());
+            //System.out.println(showsList.getText());
+            
+
+        } catch (SQLException ex) {
+            showsList.setText("Error fetching data: " + ex.getMessage());
+        }
+
+    }
+    public void fetchShowsByName(){
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT name, season, episode, platform, date_created FROM shows order by name")) {
+
+            StringBuilder showsText = new StringBuilder();
+            String lastName = "";
+            //System.out.println(11111);
+
+            while (rs.next()) {
+                System.out.println(showsText.toString() + "ghgjgjg");
+                String name = rs.getString("name");
+                String date = rs.getString("date_created");
+                
+                int season = rs.getInt("season");
+                int episode = rs.getInt("episode");
+                String platform = rs.getString("platform");
+                
+
+                // Print platform name only when it changes
+                if (!name.equals(lastName)) {
+                    showsText.append("\n").append(name.toUpperCase()).append("\n");
+                    lastName =  name;
+                }
+
+                showsText.append("\n")
+                        .append("- Season ").append(season)
+                        .append(", Episode ").append(episode)
+                        .append(" on ").append(date).append("\n");
+
+                //showsText.append("tgjghjgjgjgj\n");
+                        
+            }
+
+            if (showsText.length() == 0) {
+                showsText.append("No TV shows found in the database.");
+            }
+            
+            showsList.setText(showsText.toString());
+            //System.out.println(showsList.getText());
+            
+
+        } catch (SQLException ex) {
+            showsList.setText("Error fetching data: " + ex.getMessage());
+        }
+
+    }
+
 }

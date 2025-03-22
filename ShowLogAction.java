@@ -18,7 +18,6 @@ public class ShowLogAction implements ActionListener {
         allShowsFrame.setSize(800, 400);
         allShowsFrame.setLocationRelativeTo(null);
 
-        // Create a single panel for both sort controls and show list
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
 
         // Header (TVShow Log)

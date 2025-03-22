@@ -43,6 +43,7 @@ public class ShowTVShowsAction implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println(searchText.getText());
+                searchShowsByName(searchText.getText());
             }
         });
 
@@ -96,6 +97,33 @@ public class ShowTVShowsAction implements ActionListener {
         fetchShowDefault();
 
         allShowsFrame.setVisible(true);
+    }
+
+    private void searchShowsByName(String showName){
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT DISTINCT name, platform FROM shows WHERE name LIKE '%" + showName + "%'")) {
+
+            StringBuilder showsText = new StringBuilder();
+            int index = 1;
+            while (rs.next()) {
+                String name = rs.getString("name");
+                String platform = rs.getString("platform");
+                showsText.append("\n").append(index).append(". ")
+                        .append(name)
+                        .append(" on ").append(platform).append("\n");
+                index++;
+            }
+
+            if (showsText.length() == 0) {
+                showsText.append("No TV shows found in the database.");
+            }
+            showsList.setText(showsText.toString());
+
+        } catch (SQLException ex) {
+            showsList.setText("Error connecting to database: " + ex.getMessage());
+        }
+
     }
 
     private void fetchShowDefault(){
@@ -170,9 +198,9 @@ public class ShowTVShowsAction implements ActionListener {
                 String platform = rs.getString("platform");
 
                 // Print platform name only when it changes
-                if (!name.equals(lastName)) {
+                if (!name.substring(0,1).equals(lastName)) {
                     showsText.append("\n").append(name.substring(0,1).toUpperCase()).append("\n");
-                    lastName = platform;
+                    lastName = name.substring(0,1);
                 }
 
                 showsText.append("\n")

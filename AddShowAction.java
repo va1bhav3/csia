@@ -45,10 +45,10 @@ public class AddShowAction implements ActionListener {
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
                         // Convert the date to a string
                         String dateString = currentDate.format(formatter);
-                stmt.setString(1, nameFieldResult);
+                stmt.setString(1, nameFieldResult.toUpperCase());
                 stmt.setInt(2, season);
                 stmt.setInt(3, episode);
-                stmt.setString(4, platformFieldResult);
+                stmt.setString(4, platformFieldResult.toUpperCase());
                 stmt.setString(5, dateString);
                 stmt.executeUpdate();
                 JOptionPane.showMessageDialog(frame, "Show added successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);

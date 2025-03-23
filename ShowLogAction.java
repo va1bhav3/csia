@@ -75,8 +75,6 @@ public class ShowLogAction implements ActionListener {
             }
         });
 
-        // Text area for the show list
-        //JTextArea showsList = new JTextArea();
         showsList.setEditable(false);
         showsList.setFont(new Font("Arial", Font.PLAIN, 14));
 
@@ -187,7 +185,7 @@ public class ShowLogAction implements ActionListener {
                     lastDate = date;
                 }
 
-                showsText.append("\n").append(". ")
+                showsText.append("\n").append("- ")
                         .append(name).append(" - Season ").append(season)
                         .append(", Episode ").append(episode)
                         .append(" on ").append(platform).append("\n");
@@ -234,7 +232,7 @@ public class ShowLogAction implements ActionListener {
                     lastPlatform = platform;
                 }
 
-                showsText.append("\n").append(". ")
+                showsText.append("\n").append("- ")
                         .append(name).append(" - Season ").append(season)
                         .append(", Episode ").append(episode)
                         .append(" on ").append(platform + " on ").append(date).append("\n");

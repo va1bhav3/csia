@@ -203,7 +203,7 @@ public class ShowTVShowsAction implements ActionListener {
                     lastName = name.substring(0,1);
                 }
 
-                showsText.append("\n")
+                showsText.append("\n").append("- ")
                         .append(name)
                         .append(" on ").append(platform).append("\n");
 

@@ -5,14 +5,12 @@ import java.awt.*;
 import java.sql.*;
 
 public class ShowTVShowsAction implements ActionListener {
-    //private final JFrame frame;
     private static final String URL = "jdbc:mysql://localhost:3306/tv_show_tracker";
     private static final String USER = "root";
     private static final String PASSWORD = "Va1bhav@2008";
     JTextArea showsList = new JTextArea();
 
     public ShowTVShowsAction(JFrame frame) {
-        //this.frame = frame; 
     }
 
     @Override
@@ -23,15 +21,12 @@ public class ShowTVShowsAction implements ActionListener {
         allShowsFrame.setSize(800, 400);
         allShowsFrame.setLocationRelativeTo(null);
 
-        // Create a single panel for both sort controls and show list
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
 
-        // Header (TVShow Log)
         JLabel titleLabel = new JLabel("TVShow Names", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
         mainPanel.add(titleLabel, BorderLayout.NORTH);
 
-        // Sort by panel (horizontal layout with buttons)
         JPanel sortPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 5));
         sortPanel.add(new JLabel("Sort by: "));
         
@@ -77,23 +72,18 @@ public class ShowTVShowsAction implements ActionListener {
 
         
 
-        // Text area for the show list
         
         showsList.setEditable(false);
         showsList.setFont(new Font("Arial", Font.PLAIN, 14));
 
-        // Create a sub-panel to hold sort controls and show list vertically
         JPanel contentPanel = new JPanel(new BorderLayout(5, 5));
         contentPanel.add(sortPanel, BorderLayout.NORTH);
         contentPanel.add(new JScrollPane(showsList), BorderLayout.CENTER);
 
-        // Add the content panel to the main panel
         mainPanel.add(contentPanel, BorderLayout.CENTER);
 
-        // Add the main panel to the frame
         allShowsFrame.add(mainPanel, BorderLayout.CENTER);
 
-        // Fetch data from the database
         fetchShowDefault();
 
         allShowsFrame.setVisible(true);
@@ -165,7 +155,6 @@ public class ShowTVShowsAction implements ActionListener {
                 String name = rs.getString("name");
                 String platform = rs.getString("platform");
 
-                // Print platform name only when it changes
                 if (!platform.equals(lastPlatform)) {
                     showsText.append("\n").append(platform.toUpperCase()).append("\n");
                     lastPlatform = platform;
@@ -197,7 +186,6 @@ public class ShowTVShowsAction implements ActionListener {
                 String name = rs.getString("name");
                 String platform = rs.getString("platform");
 
-                // Print platform name only when it changes
                 if (!name.substring(0,1).equals(lastName)) {
                     showsText.append("\n").append(name.substring(0,1).toUpperCase()).append("\n");
                     lastName = name.substring(0,1);

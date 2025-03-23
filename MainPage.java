@@ -60,7 +60,7 @@ public class MainPage {
         frame.add(formPanel, BorderLayout.CENTER);
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
-        JButton addButton = new JButton("Add Show");
+        JButton addButton = new JButton("Add Entry");
         JButton showButton = new JButton("Show Log");
         JButton logButton = new JButton("Show TV Shows");
         buttonPanel.add(addButton);

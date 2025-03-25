@@ -26,6 +26,8 @@ public class ShowTVShowsAction implements ActionListener {
        allShowsFrame.setSize(800, 400);
        allShowsFrame.setLocationRelativeTo(null);
 
+       
+
 
        JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
 
@@ -34,6 +36,7 @@ public class ShowTVShowsAction implements ActionListener {
        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
        mainPanel.add(titleLabel, BorderLayout.NORTH);
 
+       sortHelperMethods SHM = new sortHelperMethods(showsList, false);
 
        JPanel sortPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 5));
        sortPanel.add(new JLabel("Sort by: "));
@@ -45,8 +48,8 @@ public class ShowTVShowsAction implements ActionListener {
        searchText.addActionListener(new ActionListener() {
            @Override
            public void actionPerformed(ActionEvent e) {
-               System.out.println(searchText.getText());
-               searchShowsByName(searchText.getText());
+               //System.out.println(searchText.getText());
+               SHM.searchDataBase(searchText.getText());
            }
        });
 
@@ -54,7 +57,8 @@ public class ShowTVShowsAction implements ActionListener {
        platformButton.addActionListener(new ActionListener() {
            @Override
            public void actionPerformed(ActionEvent e) {
-               sortShowsByPlatform();
+               //sortShowsByPlatform();
+               SHM.retrieveDataCategorize("platform");
            }
        });
 
@@ -62,7 +66,7 @@ public class ShowTVShowsAction implements ActionListener {
        alphaButton.addActionListener(new ActionListener() {
            @Override
            public void actionPerformed(ActionEvent e){
-               sortShowsAlphabetically();
+            SHM.retrieveDataCategorize("name");
            }
        });
 
@@ -70,7 +74,7 @@ public class ShowTVShowsAction implements ActionListener {
        defaultButton.addActionListener(new ActionListener() {
            @Override
            public void actionPerformed(ActionEvent e){
-               sortShowsDefault();
+               SHM.searchDataBase("");
            }
        });
       
@@ -101,8 +105,7 @@ public class ShowTVShowsAction implements ActionListener {
        allShowsFrame.add(mainPanel, BorderLayout.CENTER);
 
 
-       sortShowsDefault();
-
+       SHM.searchDataBase("");
 
        allShowsFrame.setVisible(true);
    }

@@ -20,6 +20,8 @@ public class ShowLogAction implements ActionListener {
        allShowsFrame.setSize(800, 400);
        allShowsFrame.setLocationRelativeTo(null);
 
+       sortHelperMethods SHM = new sortHelperMethods(showsList, true);
+
 
        JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
 
@@ -40,25 +42,27 @@ public class ShowLogAction implements ActionListener {
        dateButton.addActionListener(new ActionListener() {
            @Override
            public void actionPerformed(ActionEvent e) {
-               sortShowsByDate();
+               //sortShowsByDate();
+               SHM.retrieveDataCategorize("date_created");
            }
        });
        defaultButton.addActionListener(new ActionListener() {
            @Override
            public void actionPerformed(ActionEvent e) {
-               defaultShowLog();
+               SHM.searchDataBase("");
            }
        });
        platformButton.addActionListener(new ActionListener() {
            @Override
            public void actionPerformed(ActionEvent e) {
-               sortShowsByPlatform();
+               //sortShowsByPlatform();
+               SHM.retrieveDataCategorize("platform");
            }
        });
        showNameButton.addActionListener(new ActionListener() {
            @Override
            public void actionPerformed(ActionEvent e) {
-               sortShowsByName();
+            SHM.retrieveDataCategorize("name");
            }
        });
        sortPanel.add(dateButton);
@@ -99,7 +103,7 @@ public class ShowLogAction implements ActionListener {
        allShowsFrame.add(mainPanel, BorderLayout.CENTER);
 
 
-       defaultShowLog();
+       SHM.searchDataBase("");
 
 
        allShowsFrame.setVisible(true);
@@ -175,158 +179,219 @@ public class ShowLogAction implements ActionListener {
        }
    }
 
+//    public String formatReturnMethod(String sortByName , String name, int season, int episode, String platform, String date){
+//     if (sortByName.equals("date_created")){
+//         // choose sort by date
+//         return String.format("\n- %s - Season %d, Episode %d on %s\n", name, season, episode, platform);
+//     } if (sortByName.equals("platform")){
+//         //choose sort by platformj
+//         return String.format("\n- %s - Season %d, Episode %d on %s\n",name , season, episode, date);
+//     }
+//     if (sortByName.equals("name")){
+//         return String.format("\n- Season %d, Episode %d on %s on %s\n", season, episode, platform, date);
+//     } else {
+//         return "";
+//     }
+//    }
+//    public void testretrieveDataCategorize( String sortByName){
+//     try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+//             Statement stmt = conn.createStatement();
+//             ResultSet rs = stmt.executeQuery("SELECT name, season, episode, platform, date_created FROM shows order by " + sortByName)) {
 
-   public void sortShowsByDate(){
-       try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT name, season, episode, platform, date_created FROM shows order by date_created")) {
+
+//            StringBuilder showsText = new StringBuilder();
+//            String lastDate = "";
 
 
-           StringBuilder showsText = new StringBuilder();
-           String lastDate = "";
-
-
-           while (rs.next()) {
-               System.out.println(showsText.toString() + "ghgjgjg");
-               String name = rs.getString("name");
-               String date = rs.getString("date_created");
+//            while (rs.next()) {
+//                //System.out.println(showsText.toString() + "ghgjgjg");
+//                String name = rs.getString("name");
+//                String date = rs.getString("date_created");
               
-               int season = rs.getInt("season");
-               int episode = rs.getInt("episode");
-               String platform = rs.getString("platform");
-              
-
-
-               if (!date.equals(lastDate)) {
-                   showsText.append("\n").append(date.toUpperCase()).append("\n");
-                   lastDate = date;
-               }
-
-
-               showsText.append("\n").append("- ")
-                       .append(name).append(" - Season ").append(season)
-                       .append(", Episode ").append(episode)
-                       .append(" on ").append(platform).append("\n");
-                      
-           }
-
-
-           if (showsText.length() == 0) {
-               showsText.append("No TV shows found in the database.");
-           }
-          
-           showsList.setText(showsText.toString());
-          
-
-
-       } catch (SQLException ex) {
-           showsList.setText("Error fetching data: " + ex.getMessage());
-       }
-
-
-   }
-   public void sortShowsByPlatform(){
-       try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT name, season, episode, platform, date_created FROM shows order by platform")) {
-
-
-           StringBuilder showsText = new StringBuilder();
-           String lastPlatform = "";
-
-
-           while (rs.next()) {
-               System.out.println(showsText.toString() + "ghgjgjg");
-               String name = rs.getString("name");
-               String date = rs.getString("date_created");
-              
-               int season = rs.getInt("season");
-               int episode = rs.getInt("episode");
-               String platform = rs.getString("platform");
+//                int season = rs.getInt("season");
+//                int episode = rs.getInt("episode");
+//                String platform = rs.getString("platform");
               
 
 
-               if (!platform.equals(lastPlatform)) {
-                   showsText.append("\n").append(platform.toUpperCase()).append("\n");
-                   lastPlatform = platform;
-               }
+//                if (!rs.getString(sortByName).equals(lastDate)) {
+//                    showsText.append("\n").append(rs.getString(sortByName).toUpperCase()).append("\n");
+//                    lastDate = rs.getString(sortByName);
+//                }
 
 
-               showsText.append("\n").append("- ")
-                       .append(name).append(" - Season ").append(season)
-                       .append(", Episode ").append(episode)
-                       .append(" on ").append(platform + " on ").append(date).append("\n");
-
+//                String result = formatReturnMethod(sortByName, name, season, episode, platform, date);
+//                showsText.append(result);
 
                       
-           }
+//            }
 
 
-           if (showsText.length() == 0) {
-               showsText.append("No TV shows found in the database.");
-           }
+//            if (showsText.length() == 0) {
+//                showsText.append("No TV shows found in the database.");
+//            }
           
-           showsList.setText(showsText.toString());
+//            showsList.setText(showsText.toString());
           
 
 
-       } catch (SQLException ex) {
-           showsList.setText("Error fetching data: " + ex.getMessage());
-       }
+//        } catch (SQLException ex) {
+//            showsList.setText("Error fetching data: " + ex.getMessage());
+//        }
+
+//    }
+
+//    public void sortShowsByDate(){
+//        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+//             Statement stmt = conn.createStatement();
+//             ResultSet rs = stmt.executeQuery("SELECT name, season, episode, platform, date_created FROM shows order by date_created")) {
 
 
-   }
-   public void sortShowsByName(){
-       try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT name, season, episode, platform, date_created FROM shows order by name")) {
+//            StringBuilder showsText = new StringBuilder();
+//            String lastDate = "";
 
 
-           StringBuilder showsText = new StringBuilder();
-           String lastName = "";
-
-
-           while (rs.next()) {
-               System.out.println(showsText.toString() + "ghgjgjg");
-               String name = rs.getString("name");
-               String date = rs.getString("date_created");
+//            while (rs.next()) {
+//                System.out.println(showsText.toString() + "ghgjgjg");
+//                String name = rs.getString("name");
+//                String date = rs.getString("date_created");
               
-               int season = rs.getInt("season");
-               int episode = rs.getInt("episode");
-               String platform = rs.getString("platform");
+//                int season = rs.getInt("season");
+//                int episode = rs.getInt("episode");
+//                String platform = rs.getString("platform");
               
 
 
-               if (!name.equals(lastName)) {
-                   showsText.append("\n").append(name.toUpperCase()).append("\n");
-                   lastName =  name;
-               }
+//                if (!date.equals(lastDate)) {
+//                    showsText.append("\n").append(date.toUpperCase()).append("\n");
+//                    lastDate = date;
+//                }
 
 
-               showsText.append("\n")
-                       .append("- Season ").append(season)
-                       .append(", Episode ").append(episode)
-                       .append(" on ").append(platform + " on ").append(date).append("\n");
+//                showsText.append("\n").append("- ")
+//                        .append(name).append(" - Season ").append(season)
+//                        .append(", Episode ").append(episode)
+//                        .append(" on ").append(platform).append("\n");
+                      
+//            }
+
+
+//            if (showsText.length() == 0) {
+//                showsText.append("No TV shows found in the database.");
+//            }
+          
+//            showsList.setText(showsText.toString());
+          
+
+
+//        } catch (SQLException ex) {
+//            showsList.setText("Error fetching data: " + ex.getMessage());
+//        }
+
+
+//    }
+//    public void sortShowsByPlatform(){
+//        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+//             Statement stmt = conn.createStatement();
+//             ResultSet rs = stmt.executeQuery("SELECT name, season, episode, platform, date_created FROM shows order by platform")) {
+
+
+//            StringBuilder showsText = new StringBuilder();
+//            String lastPlatform = "";
+
+
+//            while (rs.next()) {
+//                System.out.println(showsText.toString() + "ghgjgjg");
+//                String name = rs.getString("name");
+//                String date = rs.getString("date_created");
+              
+//                int season = rs.getInt("season");
+//                int episode = rs.getInt("episode");
+//                String platform = rs.getString("platform");
+              
+
+
+//                if (!platform.equals(lastPlatform)) {
+//                    showsText.append("\n").append(platform.toUpperCase()).append("\n");
+//                    lastPlatform = platform;
+//                }
+
+
+//                showsText.append("\n").append("- ")
+//                        .append(name).append(" - Season ").append(season)
+//                        .append(", Episode ").append(episode)
+//                        .append(" on ").append(platform + " on ").append(date).append("\n");
 
 
                       
-           }
+//            }
 
 
-           if (showsText.length() == 0) {
-               showsText.append("No TV shows found in the database.");
-           }
+//            if (showsText.length() == 0) {
+//                showsText.append("No TV shows found in the database.");
+//            }
           
-           showsList.setText(showsText.toString());
+//            showsList.setText(showsText.toString());
           
 
 
-       } catch (SQLException ex) {
-           showsList.setText("Error fetching data: " + ex.getMessage());
-       }
+//        } catch (SQLException ex) {
+//            showsList.setText("Error fetching data: " + ex.getMessage());
+//        }
 
 
-   }
+//    }
+//    public void sortShowsByName(){
+//        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+//             Statement stmt = conn.createStatement();
+//             ResultSet rs = stmt.executeQuery("SELECT name, season, episode, platform, date_created FROM shows order by name")) {
+
+
+//            StringBuilder showsText = new StringBuilder();
+//            String lastName = "";
+
+
+//            while (rs.next()) {
+//                System.out.println(showsText.toString() + "ghgjgjg");
+//                String name = rs.getString("name");
+//                String date = rs.getString("date_created");
+              
+//                int season = rs.getInt("season");
+//                int episode = rs.getInt("episode");
+//                String platform = rs.getString("platform");
+              
+
+
+//                if (!name.equals(lastName)) {
+//                    showsText.append("\n").append(name.toUpperCase()).append("\n");
+//                    lastName =  name;
+//                }
+
+
+//                showsText.append("\n")
+//                        .append("- Season ").append(season)
+//                        .append(", Episode ").append(episode)
+//                        .append(" on ").append(platform + " on ").append(date).append("\n");
+
+
+                      
+//            }
+
+
+//            if (showsText.length() == 0) {
+//                showsText.append("No TV shows found in the database.");
+//            }
+          
+//            showsList.setText(showsText.toString());
+          
+
+
+//        } catch (SQLException ex) {
+//            showsList.setText("Error fetching data: " + ex.getMessage());
+//        }
+
+
+//    }
 
 
 }
